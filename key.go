@@ -135,6 +135,11 @@ func (k *Key) Validate() bool {
 	var sum [8]byte      // checksum
 	var err error        // error holder
 
+	// nil protection
+	if k == nil {
+		return false
+	}
+
 	// init hash
 	h = sha3.NewShake128()
 
