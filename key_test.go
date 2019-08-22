@@ -30,6 +30,7 @@ func TestParse(t *testing.T) {
 			{ "2af1fe29-9d2771ad-6fb1a3b8-39b276bf-4db2ef1d-4a053328", false },
 			{ "2af1fe29-9d2771ad-6fb1a3b8-39b276bf-4db2ef1d4a053327", false },
 			{ "2af1fe299d2771ad6fb1a3b839b276bf4db2ef1d4a053327", false },
+			{"", false},
 		}
 	    for _, test := range tests {
 	    	k, err := lk.Parse(test.k)
