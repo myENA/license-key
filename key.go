@@ -152,12 +152,12 @@ func (k *Key) Validate() bool {
 	return bytes.Equal(sum[:], k.sum[:])
 }
 
-// SetSecret sets the internal hash salt
+// SetSecret sets the secret salt
 func SetSecret(s string) {
 	secret = s
 }
 
-// Secret sets the internal hash salt
+// Secret returns the secret salt
 func Secret() string {
 	return secret
 }
