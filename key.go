@@ -37,6 +37,11 @@ type Key struct {
 func (k *Key) String() string {
 	var s []string // output string
 
+	// nil protection
+	if k == nil {
+		return ""
+	}
+
 	// encode data bytes
 	for i := 0; i < dataSize; i += chunkSize {
 		s = append(s, hex.EncodeToString(k.data[i:i+chunkSize]))
