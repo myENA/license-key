@@ -27,10 +27,10 @@ const (
 	chunkSeparator = `-`
 )
 
-// keyStruct represents the internal key structure
+// Key represents the internal key structure
 type Key struct {
-	Data [dataSize]byte
-	Sum  [sumSize]byte
+	data [dataSize]byte
+	sum  [sumSize]byte
 }
 
 // String implements the stringer interface on the key object
@@ -39,12 +39,12 @@ func (k *Key) String() string {
 
 	// encode data bytes
 	for i := 0; i < dataSize; i += chunkSize {
-		s = append(s, hex.EncodeToString(k.Data[i:i+chunkSize]))
+		s = append(s, hex.EncodeToString(k.data[i:i+chunkSize]))
 	}
 
 	// encode sum bytes
 	for i := 0; i < sumSize; i += chunkSize {
-		s = append(s, hex.EncodeToString(k.Sum[i:i+chunkSize]))
+		s = append(s, hex.EncodeToString(k.sum[i:i+chunkSize]))
 	}
 
 	// join and return
@@ -58,7 +58,7 @@ func New() (*Key, error) {
 	var err error        // general error handler
 
 	// read random bytes
-	if _, err = rand.Read(k.Data[:]); err != nil {
+	if _, err = rand.Read(k.data[:]); err != nil {
 		return nil, err
 	}
 
@@ -71,12 +71,12 @@ func New() (*Key, error) {
 	}
 
 	// write data and handle errors
-	if _, err = h.Write(k.Data[:]); err != nil {
+	if _, err = h.Write(k.data[:]); err != nil {
 		return nil, err
 	}
 
 	// write sum
-	if _, err = h.Read(k.Sum[:]); err != nil {
+	if _, err = h.Read(k.sum[:]); err != nil {
 		return nil, err
 	}
 
@@ -105,7 +105,7 @@ func Parse(s string) (*Key, error) {
 	}
 
 	// set data bytes
-	copy(k.Data[:], buf)
+	copy(k.data[:], buf)
 
 	// decode checksum and check error
 	if buf, err = hex.DecodeString(strings.Join(chunks[dataSize/chunkSize:], "")); err != nil {
@@ -113,7 +113,7 @@ func Parse(s string) (*Key, error) {
 	}
 
 	// set checksum
-	copy(k.Sum[:], buf)
+	copy(k.sum[:], buf)
 
 	// validate key
 	if k.Validate() != true {
@@ -139,7 +139,7 @@ func (k *Key) Validate() bool {
 	}
 
 	// write data and handle errors
-	if _, err = h.Write(k.Data[:]); err != nil {
+	if _, err = h.Write(k.data[:]); err != nil {
 		return false
 	}
 
@@ -149,7 +149,7 @@ func (k *Key) Validate() bool {
 	}
 
 	// return checksum equality
-	return bytes.Equal(sum[:], k.Sum[:])
+	return bytes.Equal(sum[:], k.sum[:])
 }
 
 // SetSecret sets the internal hash salt
